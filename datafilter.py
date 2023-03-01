@@ -23,7 +23,7 @@ def basic_filter(item):
     return bool(re.match(pattern, review_body) and 20 < len(review_body) < 60)
 
 if __name__ == "__main__":
-    data_path = "../dataset/train/dataset_en_train.json"
+    data_path = "data/train/dataset_en_train.json"
 
     data = list(filtered_data(data_path, basic_filter))
     
