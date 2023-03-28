@@ -10,8 +10,10 @@ To use the annotation tool, either run it yourself with npm or use the provided 
 ```sh
 git clone https://github.com/jonorthwash/ud-annotatrix.git
 ```
-3. Build the program using npm. It also requires another package to be installed. All in one command:
+3. Build the program using npm. It also requires another package to be installed, which can all
+be done with one command.
 ```sh
+cd ud-annotatrix
 npm install https://github.com/TryGhost/node-sqlite3/tarball/master
 ```
 4. Run the server.
