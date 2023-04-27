@@ -19,7 +19,8 @@ def export(data, outfile="filtered.json"):
 # as well as having exactly one "." which is at the end, and having no "?" or "!"
 def basic_filter(item):
     review_body = item['review_body']
-    pattern = r"^(?=[^\.?!]*\.$)(?=.* and )(?!.* and .* and )"
+    pattern = r"^(?=[^\.?!]*$)(?=.* and )(?!.* and .* and )"
+    # pattern = r"^(?=[^\.?!]*\.$)(?=.* and )(?!.* and .* and )"
     return bool(re.match(pattern, review_body) and 20 < len(review_body) < 60)
 
 if __name__ == "__main__":
@@ -28,9 +29,20 @@ if __name__ == "__main__":
     data = list(filtered_data(data_path, basic_filter))
     
     print(f"Size of filtered dataset: {len(data)}")
+
+    for ex in data[:20]:
+        print(ex['review_body'])
+
+    with open('filtered.csv','w') as result_file:
+        result_file.write('text,\n')
+        for body in [review['review_body'] for review in data]:
+            if ',' in body:
+                body = f'"{body}"'
+            result_file.write(body)
+            result_file.write('\n')
     
-    nlp = spacy.load("en_core_web_sm")
-    docs = [nlp(x['review_body']) for x in data[0:20]]
-    displacy.serve(docs, style="dep", port=5005)
+    # nlp = spacy.load("en_core_web_sm")
+    # docs = [nlp(x['review_body']) for x in data[0:20]]
+    # displacy.serve(docs, style="dep", port=5005)
     
     # export(data)
