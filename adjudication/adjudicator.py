@@ -52,6 +52,7 @@ def find_conflicts(file_a, file_b):
 
     for i, pair in enumerate(zip(a_ann, b_ann)):
         if has_conflict(*pair):
+            print(f"Sentence {i+1}:")
             print_annotated_sentence(a_sen[i], a_ann[i])
             print_annotated_sentence(b_sen[i], b_ann[i])
             input()
