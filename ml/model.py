@@ -20,12 +20,14 @@ def make_dataframe_from_file(filepath):
     with open(filepath, "r") as data_file:
         for tokenlist in conllu.parse_incr(data_file):
             dependencies = set([(x['head'], x['deprel'], x['id']) for x in tokenlist if not x['deprel'] == '_'])
-            coordinates = [head for (head, deprel, id) in dependencies]
-            conjunctions = [id for (head, deprel, id) in dependencies if id not in coordinates]
-            for token in tokenlist:
-                label = 'B-COORDINATE' if token['id'] in coordinates else 'B-CONJUNCTION' if token['id'] in conjunctions else 'O'
-                row = pd.DataFrame([[current_sentence_id, token['form'], label]], columns=['sentence_id', 'words', 'labels'])
-                df = pd.concat([df, row], ignore_index=True)
+            ### if this sentence has NO annotations, leave it out of the dataframe
+            if len(dependencies) > 0:
+                coordinates = [head for (head, deprel, id) in dependencies]
+                conjunctions = [id for (head, deprel, id) in dependencies if id not in coordinates]
+                for token in tokenlist:
+                    label = 'B-COORDINATE' if token['id'] in coordinates else 'B-CONJUNCTION' if token['id'] in conjunctions else 'O'
+                    row = pd.DataFrame([[current_sentence_id, token['form'], label]], columns=['sentence_id', 'words', 'labels'])
+                    df = pd.concat([df, row], ignore_index=True)
             current_sentence_id += 1
 
     return df
@@ -60,18 +62,18 @@ def create_model():
 
 
 if __name__ == "__main__":
-    train = make_dataframe_from_files(["annotations/internal/1_ian.conllu"])
+    train = make_dataframe_from_files(["annotations/external/ds1-huiyu.txt.conllu"])
     test = make_dataframe_from_files(["annotations/internal/2_ian.conllu"])
     model = create_model()
 
-    print("Evaluating model before training:")
-    before, _, _ = model.eval_model(test, silent=True)
-    print(before)
+    # print("Evaluating model before training:")
+    # before, _, _ = model.eval_model(test, silent=True)
+    # print(before)
 
-    print("Training model:")
-    model.train_model(train, eval_data=test)
+    # print("Training model:")
+    # model.train_model(train, eval_data=test)
 
-    print("Evaluating model after training:")
-    after, _, preds_list = model.eval_model(test, silent=True)
-    print(after)
-    print(preds_list)
+    # print("Evaluating model after training:")
+    # after, _, preds_list = model.eval_model(test, silent=True)
+    # print(after)
+    # print(preds_list)
