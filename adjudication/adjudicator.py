@@ -21,13 +21,16 @@ def has_conflict(a_deps, b_deps):
     return not a_deps == b_deps
 
 def print_annotated_sentence(sentence, deps):
-    for first, deprel, second in deps:
+    for first, deprel, second in sorted(deps, key=lambda dep: dep[1], reverse=True):
+        reverse = False
         if second < first:
             first, second = second, first
-        print(" ".join([" " * len(word) for word in sentence[:first-1]]), end="")
-        print(" ", end="")
-        print("-".join(["-" * len(word) for word in sentence[first-1:second]]), end="")
-        print(f" {deprel}")
+            reverse = True
+        if not first == 1:
+            print(" ".join([" " * len(word) for word in sentence[:first-1]]), end=" ")
+        print("-".join(["-" * len(word) for word in sentence[first-1:second]]), end=" ")
+        arrow = "<-" if reverse else "->"
+        print(f"{arrow} {deprel}")
         
     print(" ".join(sentence))
     print()
