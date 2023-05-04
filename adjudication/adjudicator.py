@@ -26,6 +26,13 @@ def find_conflicts(file_a, file_b):
 
     if not set(a_sen) == set(b_sen):
         raise ValueError(f"{file_a} and {file_b} do not represent the same data!")
+    
+    n_a = len([a for a in a_ann if len(a) > 0])
+    print(f"{file_a} has {n_a} completed annotations.")
+    n_b = len([b for b in b_ann if len(b) > 0])
+    print(f"{file_b} has {n_b} completed annotations.")
+
+    input("Press enter to find conflicts.")
 
     for i, pair in enumerate(zip(a_ann, b_ann)):
         if has_conflict(*pair):
