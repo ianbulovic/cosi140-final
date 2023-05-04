@@ -33,14 +33,14 @@ def total_agreement(file_a, file_b):
     if not set(a_sentences) == set(b_sentences):
         raise ValueError(f"{file_a} and {file_b} do not represent the same data!")
 
-    n = len(a_sentences)
+    n = len([(a, b) for a, b in zip(a_annotations, b_annotations) if len(a) > 0 and len(b) > 0])
     # average agreement over all sentences
     agreement = sum([sentence_level_agreement(a_annotations[i], b_annotations[i]) for i in range(n)]) / n
     return agreement
 
 if __name__ == "__main__":
-    file_a = "annotations/internal/2_ian.conllu"
-    file_b = "annotations/internal/2_josh.conllu"
+    file_a = "annotations/external/ds1-huiyu.txt.conllu"
+    file_b = "annotations/external/ds1-kimmy.txt.conllu"
 
     agreement = total_agreement(file_a, file_b)
 
