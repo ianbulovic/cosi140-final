@@ -38,7 +38,10 @@ def find_conflicts(file_a, file_b):
     b_sen, b_ann = read_annotation_file(file_b)
 
     if not set(a_sen) == set(b_sen):
-        raise ValueError(f"{file_a} and {file_b} do not represent the same data!")
+        sym_diff = set(a_sen).symmetric_difference(set(b_sen))
+        for sen in sym_diff:
+            print(" ".join(sen))
+        raise ValueError(f"{file_a} and {file_b} do not represent the same data! ({len(sym_diff)} mismatched sentences)")
     
     n_a = len([a for a in a_ann if len(a) > 0])
     print(f"{file_a} has {n_a} completed annotations.")
@@ -54,7 +57,7 @@ def find_conflicts(file_a, file_b):
             input()
 
 if __name__ == "__main__":
-    file_a = "annotations/external/ds1-huiyu.txt.conllu"
-    file_b = "annotations/external/ds1-kimmy.txt.conllu"
+    file_a = "annotations/external/ds2-tabitha.txt.conllu"
+    file_b = "annotations/external/ds2-alicia.txt.conllu"
 
     find_conflicts(file_a, file_b)
